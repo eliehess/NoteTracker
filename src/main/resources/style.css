@@ -1,0 +1,12 @@
+.button {
+    -fx-background-color: linear-gradient(#dddddd, #aaaaaa);
+    -fx-border-color: black;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-background-insets: 0;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(#aaaaaa, #666666);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0.0, 0, 1);
+}

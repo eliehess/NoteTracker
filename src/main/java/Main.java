@@ -16,7 +16,7 @@ public class Main extends Application {
     private static URL scene;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
         stage.setResizable(false);
         stage.setMaxHeight(HEIGHT);
@@ -28,22 +28,25 @@ public class Main extends Application {
         stage.show();
     }
 
-
     public static void main(String[] args) {
         launch(args);
     }
 
-    private static void loadHome() throws IOException {
+    static void loadHome() throws IOException {
         Parent loadingRoot = FXMLLoader.load(scene);
         stage.setTitle("NoteTracker");
         stage.setScene(new Scene(loadingRoot));
     }
 
-    public static String getSongName() {
+    static String getSongName() {
         return songName;
     }
 
-    public static void setSongName(String songName) {
+    static void setSongName(String songName) {
         Main.songName = songName;
+    }
+
+    static Stage getStage() {
+        return stage;
     }
 }

@@ -30,7 +30,7 @@
         </rowConstraints>
         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"
                    GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
-            <Image url="@Title.png"/>
+            <Image url="@Images/Title.png"/>
             <GridPane.margin>
                 <Insets top="10.0"/>
             </GridPane.margin>
@@ -43,7 +43,7 @@
         </Label>
         <ImageView fitHeight="100.0" fitWidth="200.0" onMouseClicked="#image1Click" pickOnBounds="true"
                    preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="3">
-            <Image url="@AlmaMater.png"/>
+            <Image url="@Images/AlmaMater.png"/>
         </ImageView>
         <Label text="Alma Mater" GridPane.halignment="CENTER" GridPane.rowIndex="4"/>
         <Label text="Crazy Train" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4"/>
@@ -53,23 +53,23 @@
         <Label text="Take on Me" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6"/>
         <ImageView fitHeight="100.0" fitWidth="200.0" onMouseClicked="#image2Click" pickOnBounds="true"
                    preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
-            <Image url="@CrazyTrain.png"/>
+            <Image url="@Images/CrazyTrain.png"/>
         </ImageView>
         <ImageView fitHeight="100.0" fitWidth="200.0" onMouseClicked="#image3Click" pickOnBounds="true"
                    preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
-            <Image url="@EyeOfTheTiger.png"/>
+            <Image url="@Images/EyeOfTheTiger.png"/>
         </ImageView>
         <ImageView fitHeight="100.0" fitWidth="200.0" onMouseClicked="#image4Click" pickOnBounds="true"
                    preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="5">
-            <Image url="@SevenNationArmy.png"/>
+            <Image url="@Images/SevenNationArmy.png"/>
         </ImageView>
         <ImageView fitHeight="100.0" fitWidth="200.0" onMouseClicked="#image5Click" pickOnBounds="true"
                    preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5">
-            <Image url="@SweetCaroline.png"/>
+            <Image url="@Images/SweetCaroline.png"/>
         </ImageView>
         <ImageView fitHeight="100.0" fitWidth="200.0" onMouseClicked="#image6Click" pickOnBounds="true"
                    preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5">
-            <Image url="@TakeOnMe.png"/>
+            <Image url="@Images/TakeOnMe.png"/>
         </ImageView>
     </GridPane>
 </AnchorPane>
