@@ -1,8 +1,11 @@
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -14,7 +17,10 @@ public class SongController implements Initializable {
     private ImageView image;
     @FXML
     private Button commentButton;
+    @FXML
+    private AnchorPane anchor;
 
+    private TextArea commentBox = null;
     private boolean commentSelected = false;
 
     @Override
@@ -60,5 +66,19 @@ public class SongController implements Initializable {
         else
             commentButton.setStyle("-fx-background-color: linear-gradient(#666666, #222222);-fx-text-fill: white");
         commentSelected = !commentSelected;
+    }
+
+    @FXML
+    private void imageClicked(MouseEvent mouseEvent) {
+        if (!commentSelected) return;
+
+        if(commentBox == null) {
+            commentBox = new TextArea();
+            anchor.getChildren().add(commentBox);
+            commentBox.setVisible(true);
+            commentBox.setPrefSize(200, 150);
+        }
+
+        commentBox.relocate(mouseEvent.getSceneX(), mouseEvent.getSceneY());
     }
 }
