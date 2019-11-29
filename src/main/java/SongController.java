@@ -14,12 +14,27 @@ public class SongController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         String songName = Main.getSongName();
-        if(songName.equals("AlmaMater")) {
-            image.setImage(new Image(getClass().getResourceAsStream("Images/AlmaMater.png")));
-        } else if(songName.equals("CrazyTrain")) {
-            image.setImage(new Image(getClass().getResourceAsStream("Images/CrazyTrain.png")));
-        } else {
-            System.out.println("ow");
+        switch (songName) {
+            case "AlmaMater":
+                image.setImage(new Image(getClass().getResourceAsStream("Images/AlmaMater.png")));
+                break;
+            case "CrazyTrain":
+                image.setImage(new Image(getClass().getResourceAsStream("Images/CrazyTrain.png")));
+                break;
+            case "EyeOfTheTiger":
+                image.setImage(new Image(getClass().getResourceAsStream("Images/EyeOfTheTiger.png")));
+                break;
+            case "SevenNationArmy":
+                image.setImage(new Image(getClass().getResourceAsStream("Images/SevenNationArmy.png")));
+                break;
+            case "SweetCaroline":
+                image.setImage(new Image(getClass().getResourceAsStream("Images/SweetCaroline.png")));
+                break;
+            case "TakeOnMe":
+                image.setImage(new Image(getClass().getResourceAsStream("Images/TakeOnMe.png")));
+                break;
+            default:
+                System.out.println("ERROR: Invalid song name");
         }
     }
 
