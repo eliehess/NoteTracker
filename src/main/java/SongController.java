@@ -16,38 +16,23 @@ public class SongController implements Initializable {
     @FXML
     private ImageView image;
     @FXML
+    private Button highlightButton;
+    @FXML
     private Button commentButton;
+    @FXML
+    private Button clearButton;
     @FXML
     private AnchorPane anchor;
 
     private Comment comment = null;
-    private boolean commentSelected = false;
+    private boolean commentButtonSelected = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        highlightButton.setVisible(false); //TODO: Add functionality and remove this line
+
         String songName = Main.getSongName();
-        switch (songName) {
-            case "AlmaMater":
-                image.setImage(new Image(getClass().getResourceAsStream("Images/AlmaMater.png")));
-                break;
-            case "CrazyTrain":
-                image.setImage(new Image(getClass().getResourceAsStream("Images/CrazyTrain.png")));
-                break;
-            case "EyeOfTheTiger":
-                image.setImage(new Image(getClass().getResourceAsStream("Images/EyeOfTheTiger.png")));
-                break;
-            case "SevenNationArmy":
-                image.setImage(new Image(getClass().getResourceAsStream("Images/SevenNationArmy.png")));
-                break;
-            case "SweetCaroline":
-                image.setImage(new Image(getClass().getResourceAsStream("Images/SweetCaroline.png")));
-                break;
-            case "TakeOnMe":
-                image.setImage(new Image(getClass().getResourceAsStream("Images/TakeOnMe.png")));
-                break;
-            default:
-                System.out.println("ERROR: Invalid song name");
-        }
+        image.setImage(new Image(getClass().getResourceAsStream("Images/" + songName + ".png")));
     }
 
     @FXML
@@ -61,11 +46,7 @@ public class SongController implements Initializable {
 
     @FXML
     private void commentButtonClicked() {
-        if (commentSelected)
-            commentButton.setStyle("");
-        else
-            commentButton.setStyle("-fx-background-color: linear-gradient(#666666, #222222);-fx-text-fill: white");
-        commentSelected = !commentSelected;
+        toggleCommentButton();
     }
 
     @FXML
@@ -80,11 +61,20 @@ public class SongController implements Initializable {
 
     @FXML
     private void imageClicked(MouseEvent mouseEvent) {
-        if (!commentSelected) return;
+        if (!commentButtonSelected) return;
 
         commentButtonClicked();
         if (comment == null)
             comment = new Comment(200, 120, mouseEvent.getSceneX(), mouseEvent.getSceneY());
+    }
+
+    private void toggleCommentButton() {
+        if (commentButtonSelected)
+            commentButton.setStyle("");
+        else
+            commentButton.setStyle("-fx-background-color: linear-gradient(#666666, #222222);-fx-text-fill: white");
+
+        commentButtonSelected = !commentButtonSelected;
     }
 
     private class Comment {
@@ -143,6 +133,7 @@ public class SongController implements Initializable {
             } else marker.setVisible(true);
 
             thisExists = true;
+            clearButton.setDisable(false);
         }
 
         void cancelClicked() {
@@ -168,6 +159,7 @@ public class SongController implements Initializable {
             anchor.getChildren().remove(doneButton);
             anchor.getChildren().remove(cancelButton);
             comment = null;
+            clearButton.setDisable(true);
         }
     }
 }
