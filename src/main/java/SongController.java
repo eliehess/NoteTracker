@@ -27,6 +27,9 @@ public class SongController implements Initializable {
     private Comment comment = null;
     private boolean commentButtonSelected = false;
 
+    private static final int COMMENT_WIDTH = 201;
+    private static final int COMMENT_HEIGHT = 120;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         highlightButton.setVisible(false); //TODO: Add functionality and remove this line
@@ -57,6 +60,7 @@ public class SongController implements Initializable {
     @FXML
     private void clearButtonClicked() {
         if (comment != null) comment.delete();
+        clearButton.setDisable(true);
     }
 
     @FXML
@@ -65,7 +69,7 @@ public class SongController implements Initializable {
 
         commentButtonClicked();
         if (comment == null)
-            comment = new Comment(200, 120, mouseEvent.getSceneX(), mouseEvent.getSceneY());
+            comment = new Comment(mouseEvent.getSceneX(), mouseEvent.getSceneY());
     }
 
     private void toggleCommentButton() {
@@ -83,29 +87,30 @@ public class SongController implements Initializable {
         TextArea text;
         Button doneButton;
         Button cancelButton;
+        Button deleteButton;
         ImageView marker = null;
         boolean thisExists = false;
         String backupText = "";
 
-        Comment(int width, int height, double xPos, double yPos) {
+        Comment(double xPos, double yPos) {
             this.xPos = xPos;
             this.yPos = yPos;
 
             text = new TextArea();
-            text.setPrefSize(width, height);
+            text.setPrefSize(COMMENT_WIDTH, COMMENT_HEIGHT);
             text.relocate(xPos, yPos);
             text.setWrapText(true);
             text.setStyle("-fx-border-color: black");
 
             doneButton = new Button();
             doneButton.setText("Done");
-            doneButton.setPrefSize(50, 25);
-            doneButton.relocate(xPos + width - 50, yPos - 27);
+            doneButton.setPrefSize((float) COMMENT_WIDTH / 3, 25);
+            doneButton.relocate(xPos + (2 * (float) (COMMENT_WIDTH / 3)), yPos - 27);
             doneButton.setOnAction(e -> doneClicked());
 
             cancelButton = new Button();
             cancelButton.setText("Cancel");
-            cancelButton.setPrefSize(75, 25);
+            cancelButton.setPrefSize((float) COMMENT_WIDTH / 3, 25);
             cancelButton.relocate(xPos, yPos - 27);
             cancelButton.setOnAction(e -> cancelClicked());
 
@@ -115,6 +120,11 @@ public class SongController implements Initializable {
         }
 
         void doneClicked() {
+            if(text.getText().trim().equals("")) {
+                cancelClicked();
+                return;
+            }
+
             text.setVisible(false);
             doneButton.setVisible(false);
             cancelButton.setVisible(false);
@@ -126,7 +136,7 @@ public class SongController implements Initializable {
                 marker.setImage(new Image(getClass().getResourceAsStream("Images/Comment.png")));
                 marker.relocate(xPos, yPos);
                 marker.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                    imageClicked();
+                    markerClicked();
                     event.consume();
                 });
                 anchor.getChildren().add(marker);
@@ -142,15 +152,25 @@ public class SongController implements Initializable {
                 text.setVisible(false);
                 doneButton.setVisible(false);
                 cancelButton.setVisible(false);
+                deleteButton.setVisible(false);
                 marker.setVisible(true);
             } else delete();
         }
 
-        void imageClicked() {
+        void markerClicked() {
+            marker.setVisible(false);
             text.setVisible(true);
             doneButton.setVisible(true);
             cancelButton.setVisible(true);
-            marker.setVisible(false);
+
+            if(deleteButton == null) {
+                deleteButton = new Button();
+                deleteButton.setText("Delete");
+                deleteButton.setPrefSize((float) COMMENT_WIDTH / 3, 25);
+                deleteButton.relocate(xPos + (float) COMMENT_WIDTH / 3, yPos - 27);
+                deleteButton.setOnAction(e -> delete());
+                anchor.getChildren().add(deleteButton);
+            }
         }
 
         void delete() {
@@ -158,8 +178,8 @@ public class SongController implements Initializable {
             anchor.getChildren().remove(marker);
             anchor.getChildren().remove(doneButton);
             anchor.getChildren().remove(cancelButton);
+            anchor.getChildren().remove(deleteButton);
             comment = null;
-            clearButton.setDisable(true);
         }
     }
 }
