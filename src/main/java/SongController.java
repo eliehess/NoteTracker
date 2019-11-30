@@ -75,13 +75,14 @@ public class SongController implements Initializable {
 
     @FXML
     private void clearButtonClicked() {
-        comment = null;
+        if (comment != null) comment.delete();
     }
 
     @FXML
     private void imageClicked(MouseEvent mouseEvent) {
         if (!commentSelected) return;
 
+        commentButtonClicked();
         if (comment == null)
             comment = new Comment(200, 120, mouseEvent.getSceneX(), mouseEvent.getSceneY());
     }
@@ -92,7 +93,9 @@ public class SongController implements Initializable {
         TextArea text;
         Button doneButton;
         Button cancelButton;
-        ImageView marker;
+        ImageView marker = null;
+        boolean thisExists = false;
+        String backupText = "";
 
         Comment(int width, int height, double xPos, double yPos) {
             this.xPos = xPos;
@@ -121,28 +124,49 @@ public class SongController implements Initializable {
             anchor.getChildren().add(cancelButton);
         }
 
+        void doneClicked() {
+            text.setVisible(false);
+            doneButton.setVisible(false);
+            cancelButton.setVisible(false);
+
+            backupText = text.getText();
+
+            if(marker == null) {
+                marker = new ImageView();
+                marker.setImage(new Image(getClass().getResourceAsStream("Images/Comment.png")));
+                marker.relocate(xPos, yPos);
+                marker.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                    imageClicked();
+                    event.consume();
+                });
+                anchor.getChildren().add(marker);
+            } else marker.setVisible(true);
+
+            thisExists = true;
+        }
+
+        void cancelClicked() {
+            if (thisExists) {
+                text.setText(backupText);
+                text.setVisible(false);
+                doneButton.setVisible(false);
+                cancelButton.setVisible(false);
+                marker.setVisible(true);
+            } else delete();
+        }
+
+        void imageClicked() {
+            text.setVisible(true);
+            doneButton.setVisible(true);
+            cancelButton.setVisible(true);
+            marker.setVisible(false);
+        }
+
         void delete() {
             anchor.getChildren().remove(text);
             anchor.getChildren().remove(marker);
             anchor.getChildren().remove(doneButton);
             anchor.getChildren().remove(cancelButton);
-        }
-
-        void doneClicked() {
-            System.out.println("done");
-
-            text.setVisible(false);
-            doneButton.setVisible(false);
-            cancelButton.setVisible(false);
-
-            marker = new ImageView();
-            marker.setImage(new Image(getClass().getResourceAsStream("Images/Comment.png")));
-            marker.relocate(xPos, yPos);
-            anchor.getChildren().add(marker);
-        }
-
-        void cancelClicked() {
-            System.out.println("cancel");
             comment = null;
         }
     }
