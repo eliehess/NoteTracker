@@ -75,48 +75,75 @@ public class SongController implements Initializable {
 
     @FXML
     private void clearButtonClicked() {
-        if(comment != null)
-            comment.hide();
+        comment = null;
     }
 
     @FXML
     private void imageClicked(MouseEvent mouseEvent) {
         if (!commentSelected) return;
 
-        if(comment == null)
-            comment = new Comment(200, 150, mouseEvent.getSceneX(), mouseEvent.getSceneY());
+        if (comment == null)
+            comment = new Comment(200, 120, mouseEvent.getSceneX(), mouseEvent.getSceneY());
     }
 
     private class Comment {
         double xPos;
         double yPos;
-        int width;
-        int height;
-        TextArea textArea;
-        Button button;
+        TextArea text;
+        Button doneButton;
+        Button cancelButton;
+        ImageView marker;
 
         Comment(int width, int height, double xPos, double yPos) {
-            this.width = width;
-            this.height = height;
             this.xPos = xPos;
             this.yPos = yPos;
 
-            textArea = new TextArea();
-            anchor.getChildren().add(textArea);
-            textArea.setPrefSize(width, height);
-            textArea.relocate(xPos, yPos);
-            textArea.setWrapText(true);
+            text = new TextArea();
+            text.setPrefSize(width, height);
+            text.relocate(xPos, yPos);
+            text.setWrapText(true);
+            text.setStyle("-fx-border-color: black");
 
-            button = new Button();
-            anchor.getChildren().add(button);
-            button.setText("Done");
-            button.setPrefSize(50, 25);
-            button.relocate(xPos + width - 50, yPos - 25);
+            doneButton = new Button();
+            doneButton.setText("Done");
+            doneButton.setPrefSize(50, 25);
+            doneButton.relocate(xPos + width - 50, yPos - 27);
+            doneButton.setOnAction(e -> doneClicked());
+
+            cancelButton = new Button();
+            cancelButton.setText("Cancel");
+            cancelButton.setPrefSize(75, 25);
+            cancelButton.relocate(xPos, yPos - 27);
+            cancelButton.setOnAction(e -> cancelClicked());
+
+            anchor.getChildren().add(text);
+            anchor.getChildren().add(doneButton);
+            anchor.getChildren().add(cancelButton);
         }
 
-        void hide() {
-            textArea.setVisible(false);
-            button.setVisible(false);
+        void delete() {
+            anchor.getChildren().remove(text);
+            anchor.getChildren().remove(marker);
+            anchor.getChildren().remove(doneButton);
+            anchor.getChildren().remove(cancelButton);
+        }
+
+        void doneClicked() {
+            System.out.println("done");
+
+            text.setVisible(false);
+            doneButton.setVisible(false);
+            cancelButton.setVisible(false);
+
+            marker = new ImageView();
+            marker.setImage(new Image(getClass().getResourceAsStream("Images/Comment.png")));
+            marker.relocate(xPos, yPos);
+            anchor.getChildren().add(marker);
+        }
+
+        void cancelClicked() {
+            System.out.println("cancel");
+            comment = null;
         }
     }
 }
