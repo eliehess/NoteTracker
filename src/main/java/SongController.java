@@ -20,7 +20,7 @@ public class SongController implements Initializable {
     @FXML
     private AnchorPane anchor;
 
-    private TextArea commentBox = null;
+    private Comment comment = null;
     private boolean commentSelected = false;
 
     @Override
@@ -69,16 +69,54 @@ public class SongController implements Initializable {
     }
 
     @FXML
+    private void highlightButtonClicked() {
+
+    }
+
+    @FXML
+    private void clearButtonClicked() {
+        if(comment != null)
+            comment.hide();
+    }
+
+    @FXML
     private void imageClicked(MouseEvent mouseEvent) {
         if (!commentSelected) return;
 
-        if(commentBox == null) {
-            commentBox = new TextArea();
-            anchor.getChildren().add(commentBox);
-            commentBox.setVisible(true);
-            commentBox.setPrefSize(200, 150);
+        if(comment == null)
+            comment = new Comment(200, 150, mouseEvent.getSceneX(), mouseEvent.getSceneY());
+    }
+
+    private class Comment {
+        double xPos;
+        double yPos;
+        int width;
+        int height;
+        TextArea textArea;
+        Button button;
+
+        Comment(int width, int height, double xPos, double yPos) {
+            this.width = width;
+            this.height = height;
+            this.xPos = xPos;
+            this.yPos = yPos;
+
+            textArea = new TextArea();
+            anchor.getChildren().add(textArea);
+            textArea.setPrefSize(width, height);
+            textArea.relocate(xPos, yPos);
+            textArea.setWrapText(true);
+
+            button = new Button();
+            anchor.getChildren().add(button);
+            button.setText("Done");
+            button.setPrefSize(50, 25);
+            button.relocate(xPos + width - 50, yPos - 25);
         }
 
-        commentBox.relocate(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+        void hide() {
+            textArea.setVisible(false);
+            button.setVisible(false);
+        }
     }
 }

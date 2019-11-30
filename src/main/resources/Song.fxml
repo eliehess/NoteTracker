@@ -46,8 +46,8 @@
                 </GridPane.margin>
             </Button>
             <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                    mnemonicParsing="false" prefHeight="27.0" prefWidth="75.0" text="Highlight" GridPane.columnIndex="1"
-                    GridPane.halignment="CENTER">
+                    mnemonicParsing="false" onMouseClicked="#highlightButtonClicked" prefHeight="27.0" prefWidth="75.0"
+                    text="Highlight" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                 <GridPane.margin>
                     <Insets left="25.0"/>
                 </GridPane.margin>
@@ -57,8 +57,8 @@
                     prefHeight="27.0" prefWidth="75.0" text="Comment" GridPane.columnIndex="2"
                     GridPane.halignment="CENTER"/>
             <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                    mnemonicParsing="false" prefHeight="27.0" prefWidth="75.0" text="Clear" GridPane.columnIndex="3"
-                    GridPane.halignment="CENTER">
+                    mnemonicParsing="false" onMouseClicked="#clearButtonClicked" prefHeight="27.0" prefWidth="75.0"
+                    text="Clear" GridPane.columnIndex="3" GridPane.halignment="CENTER">
                 <GridPane.margin>
                     <Insets right="25.0"/>
                 </GridPane.margin>
