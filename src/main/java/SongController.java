@@ -37,15 +37,19 @@ public class SongController implements Initializable {
         highlightButton.setVisible(false); //TODO: Add functionality and remove this line
 
         String songName = Main.getSongName();
-        background.setImage(new Image(getClass().getResourceAsStream("Images/" + songName + ".png")));
+        if (songName != null)
+            background.setImage(new Image(getClass().getResourceAsStream("Images/" + songName + ".png")));
     }
 
     @FXML
     private void back() {
+        Main.storeScene(background.getScene());
+
         try {
             Main.loadHome();
         } catch (IOException e) {
             System.out.println("ERROR: IOException Detected");
+            e.printStackTrace();
         }
     }
 
@@ -178,7 +182,7 @@ public class SongController implements Initializable {
             backButton.setDisable(true);
             commentButton.setDisable(true);
             clearButton.setDisable(true);
-            
+
             marker.setVisible(false);
             text.setVisible(true);
             doneButton.setVisible(true);
