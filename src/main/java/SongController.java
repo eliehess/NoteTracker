@@ -14,7 +14,9 @@ import java.util.ResourceBundle;
 public class SongController implements Initializable {
 
     @FXML
-    private ImageView image;
+    private ImageView background;
+    @FXML
+    private Button backButton;
     @FXML
     private Button highlightButton;
     @FXML
@@ -35,7 +37,7 @@ public class SongController implements Initializable {
         highlightButton.setVisible(false); //TODO: Add functionality and remove this line
 
         String songName = Main.getSongName();
-        image.setImage(new Image(getClass().getResourceAsStream("Images/" + songName + ".png")));
+        background.setImage(new Image(getClass().getResourceAsStream("Images/" + songName + ".png")));
     }
 
     @FXML
@@ -60,7 +62,7 @@ public class SongController implements Initializable {
     @FXML
     private void clearButtonClicked() {
         if (comment != null) comment.delete();
-        clearButton.setDisable(true);
+        updateClearButton();
     }
 
     @FXML
@@ -79,6 +81,10 @@ public class SongController implements Initializable {
             commentButton.setStyle("-fx-background-color: linear-gradient(#666666, #222222);-fx-text-fill: white");
 
         commentButtonSelected = !commentButtonSelected;
+    }
+
+    private void updateClearButton() {
+        clearButton.setDisable(comment == null);
     }
 
     private class Comment {
@@ -117,10 +123,14 @@ public class SongController implements Initializable {
             anchor.getChildren().add(text);
             anchor.getChildren().add(doneButton);
             anchor.getChildren().add(cancelButton);
+
+            backButton.setDisable(true);
+            commentButton.setDisable(true);
+            clearButton.setDisable(true);
         }
 
         void doneClicked() {
-            if(text.getText().trim().equals("")) {
+            if (text.getText().trim().equals("")) {
                 cancelClicked();
                 return;
             }
@@ -128,10 +138,12 @@ public class SongController implements Initializable {
             text.setVisible(false);
             doneButton.setVisible(false);
             cancelButton.setVisible(false);
+            if (deleteButton != null)
+                deleteButton.setVisible(false);
 
             backupText = text.getText();
 
-            if(marker == null) {
+            if (marker == null) {
                 marker = new ImageView();
                 marker.setImage(new Image(getClass().getResourceAsStream("Images/Comment.png")));
                 marker.relocate(xPos, yPos);
@@ -143,7 +155,9 @@ public class SongController implements Initializable {
             } else marker.setVisible(true);
 
             thisExists = true;
-            clearButton.setDisable(false);
+            backButton.setDisable(false);
+            commentButton.setDisable(false);
+            updateClearButton();
         }
 
         void cancelClicked() {
@@ -154,23 +168,30 @@ public class SongController implements Initializable {
                 cancelButton.setVisible(false);
                 deleteButton.setVisible(false);
                 marker.setVisible(true);
+                backButton.setDisable(false);
+                commentButton.setDisable(false);
+                updateClearButton();
             } else delete();
         }
 
         void markerClicked() {
+            backButton.setDisable(true);
+            commentButton.setDisable(true);
+            clearButton.setDisable(true);
+            
             marker.setVisible(false);
             text.setVisible(true);
             doneButton.setVisible(true);
             cancelButton.setVisible(true);
 
-            if(deleteButton == null) {
+            if (deleteButton == null) {
                 deleteButton = new Button();
                 deleteButton.setText("Delete");
                 deleteButton.setPrefSize((float) COMMENT_WIDTH / 3, 25);
                 deleteButton.relocate(xPos + (float) COMMENT_WIDTH / 3, yPos - 27);
                 deleteButton.setOnAction(e -> delete());
                 anchor.getChildren().add(deleteButton);
-            }
+            } else deleteButton.setVisible(true);
         }
 
         void delete() {
@@ -180,6 +201,9 @@ public class SongController implements Initializable {
             anchor.getChildren().remove(cancelButton);
             anchor.getChildren().remove(deleteButton);
             comment = null;
+            backButton.setDisable(false);
+            commentButton.setDisable(false);
+            updateClearButton();
         }
     }
 }

@@ -20,7 +20,7 @@
             <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="45.0" vgrow="ALWAYS"/>
             <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="355.0" vgrow="SOMETIMES"/>
         </rowConstraints>
-        <ImageView fx:id="image" fitHeight="350.0" fitWidth="600.0" onMouseClicked="#imageClicked" pickOnBounds="true"
+        <ImageView fx:id="background" fitHeight="350.0" fitWidth="600.0" onMouseClicked="#imageClicked" pickOnBounds="true"
                    preserveRatio="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
             <GridPane.margin>
                 <Insets top="5.0"/>
@@ -38,9 +38,9 @@
             <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
-            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                    mnemonicParsing="false" onMouseClicked="#back" prefHeight="27.0" prefWidth="75.0"
-                    text="&lt;-  Back">
+            <Button fx:id="backButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                    minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#back" prefHeight="27.0"
+                    prefWidth="75.0" text="&lt;-  Back">
                 <GridPane.margin>
                     <Insets left="10.0"/>
                 </GridPane.margin>
