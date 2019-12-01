@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -25,6 +26,8 @@ public class SongController implements Initializable {
     private Button clearButton;
     @FXML
     private AnchorPane anchor;
+    @FXML
+    private GridPane clearConfirmGrid;
 
     private Comment comment = null;
     private boolean commentButtonSelected = false;
@@ -65,8 +68,13 @@ public class SongController implements Initializable {
 
     @FXML
     private void clearButtonClicked() {
-        if (comment != null) comment.delete();
-        updateClearButton();
+        backButton.setDisable(true);
+        commentButton.setDisable(true);
+        clearButton.setDisable(true);
+        clearConfirmGrid.setVisible(true);
+
+        if (comment != null)
+            comment.hideMarker();
     }
 
     @FXML
@@ -76,6 +84,27 @@ public class SongController implements Initializable {
         commentButtonClicked();
         if (comment == null)
             comment = new Comment(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+    }
+
+    @FXML
+    private void noClear() {
+        backButton.setDisable(false);
+        commentButton.setDisable(false);
+        clearConfirmGrid.setVisible(false);
+        if (comment != null)
+            comment.showMarker();
+        updateClearButton();
+    }
+
+    @FXML
+    private void yesClear() {
+        if (comment != null) comment.delete();
+
+        backButton.setDisable(false);
+        commentButton.setDisable(false);
+        clearButton.setDisable(false);
+        clearConfirmGrid.setVisible(false);
+        updateClearButton();
     }
 
     private void toggleCommentButton() {
@@ -154,6 +183,14 @@ public class SongController implements Initializable {
             backButton.setDisable(true);
             commentButton.setDisable(true);
             clearButton.setDisable(true);
+        }
+
+        void hideMarker() {
+            marker.setVisible(false);
+        }
+
+        void showMarker() {
+            marker.setVisible(true);
         }
 
         void doneClicked() {

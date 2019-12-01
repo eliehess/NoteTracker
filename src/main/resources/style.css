@@ -11,3 +11,11 @@
     -fx-background-color: linear-gradient(#c0ecff, #99cfff);
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0.0, 0, 1);
 }
+
+.label {
+    -fx-background-color: white;
+}
+
+.bordered {
+    -fx-border-color: black;
+}
