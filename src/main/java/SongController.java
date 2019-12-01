@@ -92,19 +92,24 @@ public class SongController implements Initializable {
     }
 
     private class Comment {
-        double xPos;
-        double yPos;
+        double realXPos;
+        double realYPos;
         TextArea text;
         Button doneButton;
         Button cancelButton;
         Button deleteButton;
-        ImageView marker = null;
+        ImageView marker;
         boolean thisExists = false;
         String backupText = "";
 
         Comment(double xPos, double yPos) {
-            this.xPos = xPos;
-            this.yPos = yPos;
+            this.realXPos = xPos;
+            this.realYPos = yPos;
+
+            if (xPos > Main.WIDTH - (COMMENT_WIDTH * 1.5))
+                xPos = Main.WIDTH - (COMMENT_WIDTH * 1.5);
+            if (yPos > Main.HEIGHT - (COMMENT_HEIGHT * 1.5))
+                yPos = Main.HEIGHT - (COMMENT_HEIGHT * 1.5);
 
             text = new TextArea();
             text.setPrefSize(COMMENT_WIDTH, COMMENT_HEIGHT);
@@ -124,9 +129,27 @@ public class SongController implements Initializable {
             cancelButton.relocate(xPos, yPos - 27);
             cancelButton.setOnAction(e -> cancelClicked());
 
+            deleteButton = new Button();
+            deleteButton.setText("Delete");
+            deleteButton.setPrefSize((float) COMMENT_WIDTH / 3, 25);
+            deleteButton.relocate(xPos + (float) COMMENT_WIDTH / 3, yPos - 27);
+            deleteButton.setOnAction(e -> delete());
+            deleteButton.setVisible(false);
+
+            marker = new ImageView();
+            marker.setImage(new Image(getClass().getResourceAsStream("Images/Comment.png")));
+            marker.relocate(realXPos - 7, realYPos - 25);
+            marker.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                markerClicked();
+                event.consume();
+            });
+            marker.setVisible(false);
+
             anchor.getChildren().add(text);
             anchor.getChildren().add(doneButton);
             anchor.getChildren().add(cancelButton);
+            anchor.getChildren().add(deleteButton);
+            anchor.getChildren().add(marker);
 
             backButton.setDisable(true);
             commentButton.setDisable(true);
@@ -142,21 +165,10 @@ public class SongController implements Initializable {
             text.setVisible(false);
             doneButton.setVisible(false);
             cancelButton.setVisible(false);
-            if (deleteButton != null)
-                deleteButton.setVisible(false);
+            deleteButton.setVisible(false);
+            marker.setVisible(true);
 
             backupText = text.getText();
-
-            if (marker == null) {
-                marker = new ImageView();
-                marker.setImage(new Image(getClass().getResourceAsStream("Images/Comment.png")));
-                marker.relocate(xPos, yPos);
-                marker.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                    markerClicked();
-                    event.consume();
-                });
-                anchor.getChildren().add(marker);
-            } else marker.setVisible(true);
 
             thisExists = true;
             backButton.setDisable(false);
@@ -187,15 +199,7 @@ public class SongController implements Initializable {
             text.setVisible(true);
             doneButton.setVisible(true);
             cancelButton.setVisible(true);
-
-            if (deleteButton == null) {
-                deleteButton = new Button();
-                deleteButton.setText("Delete");
-                deleteButton.setPrefSize((float) COMMENT_WIDTH / 3, 25);
-                deleteButton.relocate(xPos + (float) COMMENT_WIDTH / 3, yPos - 27);
-                deleteButton.setOnAction(e -> delete());
-                anchor.getChildren().add(deleteButton);
-            } else deleteButton.setVisible(true);
+            deleteButton.setVisible(true);
         }
 
         void delete() {

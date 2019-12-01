@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Application {
-    private static final int WIDTH = 600;
-    private static final int HEIGHT = 400 + 24;
+    static final int WIDTH = 600;
+    static final int HEIGHT = 400 + 24;
 
     private static Stage stage;
     private static URL scene;
