@@ -1,6 +1,6 @@
 .button {
     -fx-text-fill: black;
-    -fx-background-color: linear-gradient(#dddddd, #aaaaaa);
+    -fx-background-color: linear-gradient(#d3f6ff, #c0ecff);
     -fx-border-color: black;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
@@ -8,6 +8,6 @@
 }
 
 .button:hover {
-    -fx-background-color: linear-gradient(#aaaaaa, #666666);
+    -fx-background-color: linear-gradient(#c0ecff, #99cfff);
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0.0, 0, 1);
 }

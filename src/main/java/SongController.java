@@ -82,7 +82,7 @@ public class SongController implements Initializable {
         if (commentButtonSelected)
             commentButton.setStyle("");
         else
-            commentButton.setStyle("-fx-background-color: linear-gradient(#666666, #222222);-fx-text-fill: white");
+            commentButton.setStyle("-fx-background-color: linear-gradient(#99cfff, #66a0ff);");
 
         commentButtonSelected = !commentButtonSelected;
     }
