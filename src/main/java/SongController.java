@@ -1,6 +1,7 @@
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,6 +29,10 @@ public class SongController implements Initializable {
     private AnchorPane anchor;
     @FXML
     private GridPane clearConfirmGrid;
+    @FXML
+    private GridPane featureDevGrid;
+    @FXML
+    private Label featureDevLabel;
 
     private Comment comment = null;
     private boolean commentButtonSelected = false;
@@ -37,8 +42,6 @@ public class SongController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        highlightButton.setVisible(false); //TODO: Add functionality and remove this line
-
         String songName = Main.getSongName();
         if (songName != null)
             background.setImage(new Image(getClass().getResourceAsStream("Images/" + songName + ".png")));
@@ -58,17 +61,21 @@ public class SongController implements Initializable {
 
     @FXML
     private void commentButtonClicked() {
-        toggleCommentButton();
+        if (comment == null)
+            toggleCommentButton();
+        else
+            showFeatureDev("Adding multiple comments is still in development");
     }
 
     @FXML
     private void highlightButtonClicked() {
-
+        showFeatureDev("Highlighting is still in development");
     }
 
     @FXML
     private void clearButtonClicked() {
         backButton.setDisable(true);
+        highlightButton.setDisable(true);
         commentButton.setDisable(true);
         clearButton.setDisable(true);
         clearConfirmGrid.setVisible(true);
@@ -89,6 +96,7 @@ public class SongController implements Initializable {
     @FXML
     private void noClear() {
         backButton.setDisable(false);
+        highlightButton.setDisable(false);
         commentButton.setDisable(false);
         clearConfirmGrid.setVisible(false);
         if (comment != null)
@@ -101,10 +109,18 @@ public class SongController implements Initializable {
         if (comment != null) comment.delete();
 
         backButton.setDisable(false);
+        highlightButton.setDisable(false);
         commentButton.setDisable(false);
         clearButton.setDisable(false);
         clearConfirmGrid.setVisible(false);
         updateClearButton();
+    }
+
+    @FXML
+    private void featureDevOK() {
+        featureDevGrid.setVisible(false);
+        if (comment != null)
+            comment.showMarker();
     }
 
     private void toggleCommentButton() {
@@ -114,6 +130,13 @@ public class SongController implements Initializable {
             commentButton.setStyle("-fx-background-color: linear-gradient(#99cfff, #66a0ff);");
 
         commentButtonSelected = !commentButtonSelected;
+    }
+
+    private void showFeatureDev(String label) {
+        featureDevLabel.setText(label);
+        featureDevGrid.setVisible(true);
+        if (comment != null)
+            comment.hideMarker();
     }
 
     private void updateClearButton() {
@@ -181,6 +204,7 @@ public class SongController implements Initializable {
             anchor.getChildren().add(marker);
 
             backButton.setDisable(true);
+            highlightButton.setDisable(true);
             commentButton.setDisable(true);
             clearButton.setDisable(true);
         }
@@ -209,6 +233,7 @@ public class SongController implements Initializable {
 
             thisExists = true;
             backButton.setDisable(false);
+            highlightButton.setDisable(false);
             commentButton.setDisable(false);
             updateClearButton();
         }
@@ -222,6 +247,7 @@ public class SongController implements Initializable {
                 deleteButton.setVisible(false);
                 marker.setVisible(true);
                 backButton.setDisable(false);
+                highlightButton.setDisable(false);
                 commentButton.setDisable(false);
                 updateClearButton();
             } else delete();
@@ -229,6 +255,7 @@ public class SongController implements Initializable {
 
         void markerClicked() {
             backButton.setDisable(true);
+            highlightButton.setDisable(true);
             commentButton.setDisable(true);
             clearButton.setDisable(true);
 
@@ -247,6 +274,7 @@ public class SongController implements Initializable {
             anchor.getChildren().remove(deleteButton);
             comment = null;
             backButton.setDisable(false);
+            highlightButton.setDisable(false);
             commentButton.setDisable(false);
             updateClearButton();
         }
