@@ -57,7 +57,7 @@
                 </GridPane.margin>
             </Button>
             <Button fx:id="commentButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                    minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#commentButtonClicked"
+                    minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#toggleCommentButton"
                     prefHeight="27.0" prefWidth="75.0" text="Comment" GridPane.columnIndex="2"
                     GridPane.halignment="CENTER"/>
             <Button fx:id="clearButton" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"

@@ -11,6 +11,8 @@ import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class SongController implements Initializable {
@@ -34,11 +36,11 @@ public class SongController implements Initializable {
     @FXML
     private Label featureDevLabel;
 
-    private Comment comment = null;
-    private boolean commentButtonSelected = false;
-
     private static final int COMMENT_WIDTH = 201;
     private static final int COMMENT_HEIGHT = 120;
+
+    private List<Comment> comments = new LinkedList<>();
+    private boolean commentButtonSelected = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -60,37 +62,46 @@ public class SongController implements Initializable {
     }
 
     @FXML
-    private void commentButtonClicked() {
-        if (comment == null)
-            toggleCommentButton();
+    private void toggleCommentButton() {
+        if (commentButtonSelected)
+            commentButton.setStyle("");
         else
-            showFeatureDev("Adding multiple comments is still in development");
+            commentButton.setStyle("-fx-background-color: linear-gradient(#99cfff, #66a0ff);");
+
+        commentButtonSelected = !commentButtonSelected;
     }
 
     @FXML
     private void highlightButtonClicked() {
-        showFeatureDev("Highlighting is still in development");
+        if(commentButtonSelected)
+            toggleCommentButton();
+
+        featureDevLabel.setText("Highlighting is still in development");
+        featureDevGrid.setVisible(true);
+        comments.forEach(Comment::hideMarker);
     }
 
     @FXML
     private void clearButtonClicked() {
+        if(commentButtonSelected)
+            toggleCommentButton();
+
         backButton.setDisable(true);
         highlightButton.setDisable(true);
         commentButton.setDisable(true);
         clearButton.setDisable(true);
         clearConfirmGrid.setVisible(true);
 
-        if (comment != null)
-            comment.hideMarker();
+        comments.forEach(Comment::hideMarker);
     }
 
     @FXML
     private void imageClicked(MouseEvent mouseEvent) {
-        if (!commentButtonSelected) return;
+        if (!commentButtonSelected)
+            return;
 
-        commentButtonClicked();
-        if (comment == null)
-            comment = new Comment(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+        toggleCommentButton();
+        comments.add(new Comment(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
     }
 
     @FXML
@@ -99,14 +110,13 @@ public class SongController implements Initializable {
         highlightButton.setDisable(false);
         commentButton.setDisable(false);
         clearConfirmGrid.setVisible(false);
-        if (comment != null)
-            comment.showMarker();
+        comments.forEach(Comment::showMarker);
         updateClearButton();
     }
 
     @FXML
     private void yesClear() {
-        if (comment != null) comment.delete();
+        comments = new LinkedList<>();
 
         backButton.setDisable(false);
         highlightButton.setDisable(false);
@@ -119,40 +129,24 @@ public class SongController implements Initializable {
     @FXML
     private void featureDevOK() {
         featureDevGrid.setVisible(false);
-        if (comment != null)
-            comment.showMarker();
-    }
-
-    private void toggleCommentButton() {
-        if (commentButtonSelected)
-            commentButton.setStyle("");
-        else
-            commentButton.setStyle("-fx-background-color: linear-gradient(#99cfff, #66a0ff);");
-
-        commentButtonSelected = !commentButtonSelected;
-    }
-
-    private void showFeatureDev(String label) {
-        featureDevLabel.setText(label);
-        featureDevGrid.setVisible(true);
-        if (comment != null)
-            comment.hideMarker();
+        comments.forEach(Comment::showMarker);
     }
 
     private void updateClearButton() {
-        clearButton.setDisable(comment == null);
+        clearButton.setDisable(comments.isEmpty());
     }
 
     private class Comment {
         double realXPos;
         double realYPos;
+        boolean thisExists = false;
+        String backupText = "";
+
         TextArea text;
         Button doneButton;
         Button cancelButton;
         Button deleteButton;
         ImageView marker;
-        boolean thisExists = false;
-        String backupText = "";
 
         Comment(double xPos, double yPos) {
             this.realXPos = xPos;
@@ -185,7 +179,7 @@ public class SongController implements Initializable {
             deleteButton.setText("Delete");
             deleteButton.setPrefSize((float) COMMENT_WIDTH / 3, 25);
             deleteButton.relocate(xPos + (float) COMMENT_WIDTH / 3, yPos - 27);
-            deleteButton.setOnAction(e -> delete());
+            deleteButton.setOnAction(e -> deleteThis());
             deleteButton.setVisible(false);
 
             marker = new ImageView();
@@ -207,6 +201,8 @@ public class SongController implements Initializable {
             highlightButton.setDisable(true);
             commentButton.setDisable(true);
             clearButton.setDisable(true);
+
+            comments.forEach(Comment::hideMarker);
         }
 
         void hideMarker() {
@@ -223,19 +219,21 @@ public class SongController implements Initializable {
                 return;
             }
 
+            backupText = text.getText();
+
             text.setVisible(false);
             doneButton.setVisible(false);
             cancelButton.setVisible(false);
             deleteButton.setVisible(false);
             marker.setVisible(true);
 
-            backupText = text.getText();
-
             thisExists = true;
             backButton.setDisable(false);
             highlightButton.setDisable(false);
             commentButton.setDisable(false);
             updateClearButton();
+
+            comments.forEach(Comment::showMarker);
         }
 
         void cancelClicked() {
@@ -250,7 +248,8 @@ public class SongController implements Initializable {
                 highlightButton.setDisable(false);
                 commentButton.setDisable(false);
                 updateClearButton();
-            } else delete();
+            } else deleteThis();
+            comments.forEach(Comment::showMarker);
         }
 
         void markerClicked() {
@@ -264,19 +263,23 @@ public class SongController implements Initializable {
             doneButton.setVisible(true);
             cancelButton.setVisible(true);
             deleteButton.setVisible(true);
+
+            comments.forEach(Comment::hideMarker);
         }
 
-        void delete() {
+        void deleteThis() {
             anchor.getChildren().remove(text);
             anchor.getChildren().remove(marker);
             anchor.getChildren().remove(doneButton);
             anchor.getChildren().remove(cancelButton);
             anchor.getChildren().remove(deleteButton);
-            comment = null;
+            comments.remove(this);
             backButton.setDisable(false);
             highlightButton.setDisable(false);
             commentButton.setDisable(false);
             updateClearButton();
+
+            comments.forEach(Comment::showMarker);
         }
     }
 }

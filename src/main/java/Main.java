@@ -43,12 +43,12 @@ public class Main extends Application {
     }
 
     static String getSongName() {
-        if(currentSongNum < 0 || currentSongNum > songs.size()) return null;
+        if (currentSongNum < 0 || currentSongNum > songs.size()) return null;
 
         return songs.get(currentSongNum).name;
     }
 
-    static void changeToSong(int songNum){
+    static void changeToSong(int songNum) {
         if (songNum < 0 || songNum > songs.size()) return;
 
         currentSongNum = songNum;
